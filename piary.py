@@ -116,6 +116,11 @@ def filename_for(y,m,d):
 
 	
 def main():
+	try:
+		os.chdir(os.path.dirname(os.path.abspath(__file__)))
+	except:
+		print('mao')
+		time.sleep(3)
 	now = datetime.datetime.now()
 	now_tuple = (now.year, now.month, now.day)
 	y,m,d = deepcopy(now_tuple)
@@ -175,3 +180,6 @@ def main():
 					
 if __name__ == '__main__':
 	main()
+else:
+	print('not main thread?')
+	time.sleep(3)
