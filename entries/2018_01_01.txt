@@ -1,7 +1,19 @@
-lel
-lefehgheurhgue eruhge ueuge hueg
-n
-n
-n
-n
-n
+today I made piary, and now I'm testing it for the first time. Its obviously new years day.
+I'm sitting here in our house in Abbenesstraat in a towel. Ronja is lying on the couch
+I reckon we'll watch the last episode of S2 of `The Crown` on Netflix in a moment.
+I'm busy doing my PDCS study at the VU, and the last 4 (the first 4 of the master) were hell
+The first two months I did internet programming and CNS (computer and network security)
+these were especially wang
+The last 2 subjects I just took were Distributed Systems (Iosup gamified the subject. points were a pain in the ass to track but I think ultimately I will get a good grade. I also worked myself to death along with Roy Overbeek. We built the Dragon Arena System. Its still in the Git of Zakarias Norfaelt Laws)
+...and WDPS (`widipiess`) Web Data processing systems. (This one was by Jacopo Urbani whos is pretty rad. Practicals were exhausting, especially the first one. But the course was ultimately worth it I think
+For both courses the work was mostly group work, and we had {Z,C,A,Ri} for WDPS and {Ro,C,A,Ri,D,Z} for DS where
+Ro is Roy, C is Chris (me), Ri is Rink Stiekema, D is Dalia Papuc, A is Axel Koolhaas, and Z is Zak
+,
+Over the last couple days, Ive finally set up my Raspberry Pi 3B that I got from Peter Atkinson in June or so.
+I also got a vanilla Minecraft server running on it (headless)
+Violet Zagt (ex gf of Henry Ehlers) tested is and although its a little jumpy, we can get it working properly
+,
+I'll try write a daily diary entry from now on. When I come up with something that the diary hasn't seen yet, I'll try write it out in more detail, the way Ive done so here. I may also repeat myseslf and be a little rambly. I kinda wish I had done this sooner. I'll make an effort to write diary entries if not daily, then at least regularly
+,
+Ronja and I had a nice new years celebration yesterday. Shes been suffering from cabin fever (and a cold, lel) so shes been pretty down. Our plans for Berend Baas and Peter to visit for a couple days before the new year fell apart
+ultimately we just went for a walk in the rain towards the VU between the houseboats. We got caught in two separate rain storms of course, and the dutchies were shooting off fireworks at 6pm on the 31st of course. Was nice. We finished off by making a kind of chicken & veg roast and going out to see the fireworks from the bridge up the road (the bridge on the more main street to the north maybe 600m? idk
