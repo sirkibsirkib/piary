@@ -6,12 +6,11 @@ import sys
 import errno
 import datetime
 from dicts import *
+from config import *
 from grid import Grid
 from copy import deepcopy
 import pyperclip
 import git
-
-git_dir = "./entries"
 
 PREV_N_DAYS = 36
 NEXT_N_DAYS = 10
@@ -117,7 +116,7 @@ def folder_for(y,m):
 		'{}'.format(y),
 		'{}_{}'.format(y,m)
 	]
-	return os.path.join('entries', *l)
+	return os.path.join(ENTRIES_PATH, *l)
 		
 def filename_for(y,m,d):
 	f = '{:04d}_{:02d}_{:02d}.txt'.format(y, m, d)
@@ -130,8 +129,13 @@ def assert_folder(directory):
 	
 	
 def main():
-	#try:    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-	#except: pass
+	if ENTRIES_PATH == 'path_to_entries':
+		print(('Please set the variable `ENTRIES_PATH` in `config.py`\n'
+		'to your desired entries folder path!\n'
+		'Press `ENTER` to exit.'))
+		try: input()
+		except: pass
+		exit(1)
 	now = datetime.datetime.now()
 	now_tuple = (now.year, now.month, now.day, now.weekday())
 	y,m,d,wd = deepcopy(now_tuple)
@@ -153,7 +157,7 @@ def main():
 			print('No entry yet for today ({}, {}-{}-{}):'.format(weekday_name[wd], y, month_name[m-1], d))
 		sys.stdout.write('::  ')
 		try:
-			text_in = input().strip()
+			text_in = input()
 		except KeyboardInterrupt:
 			print('\nSee you tomorrow!')
 			exit(0)
@@ -185,7 +189,7 @@ def main():
 					try:
 						g
 					except:
-						try: g = git.cmd.Git(git_dir)
+						try: g = git.cmd.Git(ENTRIES_PATH)
 						except:
 							print('failed to find git repo in `entries` folder!')
 							continue
