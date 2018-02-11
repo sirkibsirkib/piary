@@ -78,29 +78,29 @@ def print_vis(y, m, d, wd, now_tuple):
 		days_backward += 1
 	g.print_grid()
 
-def prev_date(y,m,d,wd):
-	d2 = d-1
+def prev_date(y,m,d,wd,steps=1):
+	d2 = d-steps
 	m2 = m
 	y2 = y
-	if d2 == 0:
-		m2 = m-1
+	while d2 <= 0:
+		m2 -= 1
 		if m2 == 0:
 			m2 = 12
-			y2 = y-1
+			y2 -= 1
 		d2 = last_day(m2, y2)
-	return y2, m2, d2, (wd-1 if wd > 0 else 6)
+	return y2, m2, d2, (wd-steps)%7
 	
-def next_date(y,m,d,wd):
-	d2 = d+1
+def next_date(y,m,d,wd,steps=1):
+	d2 = d+steps
 	m2 = m
 	y2 = y
-	if d2 > last_day(m2,y2):
+	while d2 > last_day(m2,y2):
 		d2 = 1
 		m2 += 1
 		if m2 > 12:
 			y2 += 1
 			m2 = 1
-	return y2, m2, d2, (wd+1 if wd < 6 else 0)
+	return y2, m2, d2, (wd+steps)%7
 
 def leap(year):
 	return year%4 == 0
@@ -157,7 +157,7 @@ def main():
 			print('No entry yet for today ({}, {}-{}-{}):'.format(weekday_name[wd], y, month_name[m-1], d))
 		sys.stdout.write('::  ')
 		try:
-			text_in = input()
+			text_in = input().strip()
 		except KeyboardInterrupt:
 			print('\nSee you tomorrow!')
 			exit(0)
@@ -178,12 +178,43 @@ def main():
 				if text_in == '/today' or text_in == '/t':
 					y,m,d,wd = now.year, now.month, now.day, now.weekday()
 					print('going to today day!')
-				elif text_in == '/prev' or text_in == '/p':
-					y,m,d,wd = prev_date(y,m,d,wd)
-					print('going to previous day!')
-				elif text_in == '/next' or text_in == '/n':
-					y,m,d,wd = next_date(y,m,d,wd)
-					print('going to next day!')
+				elif text_in.startswith('/prev') or text_in.startswith('/p'):
+					splitted = text_in.split(' ')
+					if len(splitted) == 1:
+						y,m,d,wd = prev_date(y,m,d,wd)
+						print('going to previous day!')
+					elif len(splitted) == 2:
+						try:
+							x = int(splitted[1])
+							if x < 0:
+								y,m,d,wd = next_date(y,m,d,wd,steps=-x)
+							elif x > 0:
+								y,m,d,wd = prev_date(y,m,d,wd,steps=x)
+						except:
+							print('something went wrong!\nPress ENTER to continue')
+							input()
+					else:
+						print('Wrong number of args! expected 0 or 1!\nPress ENTER to continue')
+						input()
+					suppress_tip = True
+				elif text_in.startswith('/next') or text_in.startswith('/n'):
+					splitted = text_in.split(' ')
+					if len(splitted) == 1:
+						y,m,d,wd = next_date(y,m,d,wd)
+					elif len(splitted) == 2:
+						try:
+							x = int(splitted[1])
+							if x < 0:
+								y,m,d,wd = prev_date(y,m,d,wd,steps=-x)
+							elif x > 0:
+								y,m,d,wd = next_date(y,m,d,wd,steps=x)
+						except:
+							print('something went wrong!\nPress ENTER to continue')
+							input()
+					else:
+						print('Wrong number of args! expected 0 or 1!\nPress ENTER to continue')
+						input()
+					suppress_tip = True
 				elif text_in[1:] == 'rmln' or text_in == '/r':
 					deleted = del_line(selected_filename)
 					pyperclip.copy(deleted)
@@ -222,7 +253,10 @@ def main():
 					input()
 					suppress_tip = True
 				else:
+					print('Command not recognized! Commands are printed at the top!\n' +
+					'See `README.md` for help. Press ENTER to continue')
 					suppress_tip = True
+					input()
 				if not suppress_tip and len(text_in) > 2 and text_in[0] == '/':
 					print('Just `/{}` also works!\n'.format(text_in[1]))
 					print('press ENTER to continue...')

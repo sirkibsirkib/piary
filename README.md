@@ -49,9 +49,10 @@ Commands allow the user some degree of meta-control over entries. They are enter
 
 command | shortcut | effect
 --- | --- | --- 
-prev | p | Moves the selected day to the _previous_ chronological date.
-next | n | Moves the selected day to the _previous_ chronological date.
+prev | p | Moves the selected day to the _previous_ chronological date. Allows an optional numeric argument to specify _how many_ days to move backward.
+next | n | Moves the selected day to the _previous_ chronological date. Allows an optional numeric argument to specify _how many_ days to move forward.
 today | t | The selected date is set to the current date, according to the operating system.
 rmln | r | Removes the last line in the selected date's entry. This line is also copied into the clipboard.
 sync |  | Attempts to synchronize a git repository located WITHIN the `entries` directory. It will add all, pull and push in that order.
 exit |  | Exits the program. An interrupt signal is also a suitable means of exiting.
+path |  | Prints the path to the piary entries directory. 
