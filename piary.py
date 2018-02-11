@@ -3,6 +3,7 @@ import os
 import math
 import time
 import sys
+import errno
 import datetime
 from dicts import *
 from grid import Grid
@@ -112,15 +113,18 @@ def last_day(month, year):
 		return months_last_day[month]
 		
 def filename_for(y,m,d):
-	if not os.path.exists('entries'):
-		os.makedirs('entries')
 	f = '{:04d}_{:02d}_{:02d}.txt'.format(y, m, d)
-	return os.path.join('entries', f)
+	return os.path.join('entries', [y,m,f])
 
 	
+def assert_folder(directory):
+	if not os.path.exists(directory):
+		os.makedirs(directory)
+	
+	
 def main():
-	try:    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-	except: pass
+	#try:    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+	#except: pass
 	now = datetime.datetime.now()
 	now_tuple = (now.year, now.month, now.day, now.weekday())
 	y,m,d,wd = deepcopy(now_tuple)
@@ -212,6 +216,8 @@ def main():
 				
 			else:
 				# diary entry input
+				
+				assert_folder(selected_filename)
 				with open(selected_filename, 'a') as f:
 					f.write(('\n' if was_text else '')+text_in)
 					
