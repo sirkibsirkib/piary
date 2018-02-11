@@ -111,10 +111,17 @@ def last_day(month, year):
 		return 29 if leap(year) else 28
 	else:
 		return months_last_day[month]
+
+def folder_for(y,m):
+	l = [
+		'{}'.format(y),
+		'{}_{}'.format(y,m)
+	]
+	return os.path.join('entries', *l)
 		
 def filename_for(y,m,d):
 	f = '{:04d}_{:02d}_{:02d}.txt'.format(y, m, d)
-	return os.path.join('entries', [y,m,f])
+	return os.path.join(folder_for(y,m), f)
 
 	
 def assert_folder(directory):
@@ -217,7 +224,7 @@ def main():
 			else:
 				# diary entry input
 				
-				assert_folder(selected_filename)
+				assert_folder(folder_for(y,m))
 				with open(selected_filename, 'a') as f:
 					f.write(('\n' if was_text else '')+text_in)
 					
