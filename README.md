@@ -38,7 +38,21 @@ To get your own Piary going, follow these steps
 
 ## Using Entry Files
 
-Through use of Piary, the user will (presumably) build a large stockpile of daily entry files. These raw text files can copied out and viewed at leisure.
+Through use of Piary, the user will (presumably) build a large stockpile of daily entry files, built in a hierarchy. These raw text files can copied out and viewed at leisure.
+
+```
+└── 2018
+    ├── 2018_1
+    │   ├── 2018_01_01.txt
+    │   ├── 2018_01_02.txt
+	   ...
+    │   ├── 2018_01_30.txt
+    │   └── 2018_01_31.txt
+    ├── 2018_2
+    │   ├── 2018_02_01.txt
+    │   ├── 2018_02_02.txt
+		...
+```
 
 To faciliate more robustness of the piary, is is suggested to initialize a git repository inside the `entries` folder, and couple it with some remote repo. The `sync` command inside piary will then handle pushing and pulling to this remote repo.
 
@@ -56,3 +70,4 @@ rmln | r | Removes the last line in the selected date's entry. This line is also
 sync |  | Attempts to synchronize a git repository located WITHIN the `entries` directory. It will add all, pull and push in that order.
 exit |  | Exits the program. An interrupt signal is also a suitable means of exiting.
 path |  | Prints the path to the piary entries directory. 
+
