@@ -13,6 +13,10 @@ months_last_day = {
 	12:31,
 }
 
+weekday_name = [
+	'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+]
+
 month_name = ['Jan', 'Feb', 'Mar',
               'Apr', 'May', 'Jun',
 			  'Jul', 'Aug', 'Sep',

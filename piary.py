@@ -8,11 +8,14 @@ from dicts import *
 from grid import Grid
 from copy import deepcopy
 import pyperclip
+import git
 
+git_dir = "./entries"
 
-PREV_N_DAYS = 40
+PREV_N_DAYS = 36
 NEXT_N_DAYS = 10
-DRAW_H = 14
+DRAW_H = 17
+DRAW_W = (PREV_N_DAYS+NEXT_N_DAYS)*2 + 20
 
 
 def del_line(filename):
@@ -48,16 +51,16 @@ def del_line(filename):
 	return deleted
 	
 
-def print_vis(y, m, d, now_tuple):
-	g = Grid(87, DRAW_H, default=' ')
+def print_vis(y, m, d, wd, now_tuple):
+	g = Grid(DRAW_W, DRAW_H, default=' ')
 	for _ in range(NEXT_N_DAYS):
-		y,m,d = next_date(y,m,d)
-	days_backward = 0
-	g.stripe_up(60, DRAW_H-1, DRAW_H, char=':')
+		y,m,d,wd = next_date(y,m,d,wd)
+	days_backward = -NEXT_N_DAYS
+	g.stripe_up(PREV_N_DAYS*2, DRAW_H-1, DRAW_H, char=':')
 	while days_backward < PREV_N_DAYS:
 		x_write = (PREV_N_DAYS-days_backward) * 2
-		g.set(x_write, DRAW_H-6, '^') 
-		g.set(x_write+1, DRAW_H-6, '-') 
+		g.set(x_write, DRAW_H-6, weekday_name[wd][0]) 
+		g.set(x_write+1, DRAW_H-6, '_') 
 		g.write_at(x_write, DRAW_H-(4 if days_backward%2==0 else 5), '{:02d}'.format(d))
 		if d == 1:
 			g.write_at(x_write, DRAW_H-3, month_name[m-1])
@@ -68,14 +71,14 @@ def print_vis(y, m, d, now_tuple):
 			g.write_at(x_write+1, 0, '>>future>>')
 		try:
 			stat_info = os.stat(fname)
-			draw_height = int(stat_info.st_size**0.21)
+			draw_height = int(0.6*(stat_info.st_size**0.28))
 			g.stripe_up(x_write, DRAW_H-7, draw_height, char='#')
 		except: pass
-		y,m,d = prev_date(y,m,d)
+		y,m,d,wd = prev_date(y,m,d,wd)
 		days_backward += 1
 	g.print_grid()
 
-def prev_date(y,m,d):
+def prev_date(y,m,d,wd):
 	d2 = d-1
 	m2 = m
 	y2 = y
@@ -85,9 +88,9 @@ def prev_date(y,m,d):
 			m2 = 12
 			y2 = y-1
 		d2 = last_day(m2, y2)
-	return y2,m2,d2
+	return y2, m2, d2, (wd-1 if wd > 0 else 6)
 	
-def next_date(y,m,d):
+def next_date(y,m,d,wd):
 	d2 = d+1
 	m2 = m
 	y2 = y
@@ -97,7 +100,7 @@ def next_date(y,m,d):
 		if m2 > 12:
 			y2 += 1
 			m2 = 1
-	return y2, m2, d2
+	return y2, m2, d2, (wd+1 if wd < 6 else 0)
 
 def leap(year):
 	return year%4 == 0
@@ -119,24 +122,24 @@ def main():
 	try:    os.chdir(os.path.dirname(os.path.abspath(__file__)))
 	except: pass
 	now = datetime.datetime.now()
-	now_tuple = (now.year, now.month, now.day)
-	y,m,d = deepcopy(now_tuple)
+	now_tuple = (now.year, now.month, now.day, now.weekday())
+	y,m,d,wd = deepcopy(now_tuple)
 	while True:
 		os.system('cls')
 		selected_filename = filename_for(y,m,d)
 		was_text = False
-		print('Enter new text line(s) to append to today\'s entry. CTRL+C to end')
-		print('Enter commands as `/<command>` for any command in {prev, next, today, rmln}')
-		print_vis(y, m, d, now_tuple)
+		print('Enter new text line(s) to append to today\'s entry. CTRL+C or `exit` to end')
+		print('Enter commands as `/<command>` for any command in {prev, next, today, rmln, sync, exit}')
+		print_vis(y, m, d, wd, now_tuple)
 		try:
 			with open(selected_filename, 'r') as f:
 			
-				print('Current entry for today ({}-{}-{}) so far:'.format(y, month_name[m-1], d))
+				print('Current entry for today ({}, {}-{}-{}) so far:'.format(weekday_name[wd], y, month_name[m-1], d))
 				for ln in f:
 					print('::  '+ln.strip())
 			was_text = True
 		except:
-			print('No entry yet for today ({}-{}-{}):'.format(y, month_name[m-1], d))
+			print('No entry yet for today ({}, {}-{}-{}):'.format(weekday_name[wd], y, month_name[m-1], d))
 		sys.stdout.write('::  ')
 		try:
 			text_in = input().strip()
@@ -149,25 +152,62 @@ def main():
 			# non-empty input
 			if text_in.startswith('/'):
 				# command input
-				no_matched_command = False
+				suppress_tip = False
+				if text_in == '/exit':
+					print('See you tomorrow!')
+					exit(0)
 				if text_in == '/today' or text_in == '/t':
-					y,m,d = now.year, now.month, now.day
+					y,m,d,wd = now.year, now.month, now.day, now.weekday()
 					print('going to today day!')
 				elif text_in == '/prev' or text_in == '/p':
-					y,m,d = prev_date(y,m,d)
+					y,m,d,wd = prev_date(y,m,d,wd)
 					print('going to previous day!')
 				elif text_in == '/next' or text_in == '/n':
-					y,m,d = next_date(y,m,d)
+					y,m,d,wd = next_date(y,m,d,wd)
 					print('going to next day!')
 				elif text_in[1:] == 'rmln' or text_in == '/r':
 					deleted = del_line(selected_filename)
 					pyperclip.copy(deleted)
 					print('deleting last line! Its now in clipboard')
+				elif text_in == '/sync':
+					print('finding entries repo...')
+					try:
+						g
+					except:
+						try: g = git.cmd.Git(git_dir)
+						except:
+							print('failed to find git repo in `entries` folder!')
+							continue
+					print('pulling...')
+					try:
+						g.pull()
+					except:
+						print('pull failed')
+					print('trying existing push')
+					try:
+						g.push()
+					except:
+						print('push failed')
+					print('adding...')
+					x = g.add('.')
+					commit_msg = 'piary sync at ' + str(datetime.datetime.now())
+					try:
+						g.commit(m=commit_msg)
+						print('committed')
+						print('pushing...')
+						g.push()
+						print('success!')
+					except:
+						print('nothing to commit')
+					print('press ENTER to continue...')
+					input()
+					suppress_tip = True
 				else:
-					no_matched_command = True
-				if not no_matched_command and len(text_in) > 2 and text_in[0] == '/':
-					print('Just `/{}` also works!\nSleeping 3sec...'.format(text_in[1]))
-					time.sleep(3.0)
+					suppress_tip = True
+				if not suppress_tip and len(text_in) > 2 and text_in[0] == '/':
+					print('Just `/{}` also works!\n'.format(text_in[1]))
+					print('press ENTER to continue...')
+					input()
 					
 				
 			else:
@@ -179,4 +219,5 @@ if __name__ == '__main__':
 	main()
 else:
 	print('not main thread?')
-	time.sleep(3)
+	print('press ENTER to continue...')
+	input()
