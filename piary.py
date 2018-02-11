@@ -9,7 +9,8 @@ from dicts import *
 from config import *
 from grid import Grid
 from copy import deepcopy
-import pyperclip
+if RMLN_CLIP:
+	import pyperclip
 import git
 
 PREV_N_DAYS = 36
@@ -17,6 +18,13 @@ NEXT_N_DAYS = 10
 DRAW_H = 17
 DRAW_W = (PREV_N_DAYS+NEXT_N_DAYS)*2 + 20
 
+if ENTRIES_PATH == 'your_entries_path_here':
+	print(('Please set the variable `ENTRIES_PATH` in `config.py`\n'
+	'to your desired entries folder path!\n'
+	'Press `ENTER` to exit.'))
+	try: input()
+	except: pass
+	exit(1)
 
 def del_line(filename):
 	file = open(filename, "r+", encoding = "utf-8")
@@ -129,13 +137,6 @@ def assert_folder(directory):
 	
 	
 def main():
-	if ENTRIES_PATH == 'path_to_entries':
-		print(('Please set the variable `ENTRIES_PATH` in `config.py`\n'
-		'to your desired entries folder path!\n'
-		'Press `ENTER` to exit.'))
-		try: input()
-		except: pass
-		exit(1)
 	now = datetime.datetime.now()
 	now_tuple = (now.year, now.month, now.day, now.weekday())
 	y,m,d,wd = deepcopy(now_tuple)
@@ -217,7 +218,8 @@ def main():
 					suppress_tip = True
 				elif text_in[1:] == 'rmln' or text_in == '/r':
 					deleted = del_line(selected_filename)
-					pyperclip.copy(deleted)
+					if RMLN_CLIP:
+						pyperclip.copy(deleted)
 					print('deleting last line! Its now in clipboard')
 				elif text_in == '/sync':
 					print('finding entries repo...')
