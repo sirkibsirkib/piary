@@ -144,7 +144,7 @@ def main():
 		selected_filename = filename_for(y,m,d)
 		was_text = False
 		print('Enter new text line(s) to append to today\'s entry. CTRL+C or `exit` to end')
-		print('Enter commands as `/<command>` for any command in {prev, next, today, rmln, sync, exit}')
+		print('Enter commands as `/<command>` for any command in {prev, next, today, rmln, sync, exit, path}')
 		print_vis(y, m, d, wd, now_tuple)
 		try:
 			with open(selected_filename, 'r') as f:
@@ -168,7 +168,11 @@ def main():
 			if text_in.startswith('/'):
 				# command input
 				suppress_tip = False
-				if text_in == '/exit':
+				if text_in == '/path':
+					print('Path to entries folder is `{}`'.format(ENTRIES_PATH))
+					print('Press ENTER to continue...')
+					input()
+				elif text_in == '/exit':
 					print('See you tomorrow!')
 					exit(0)
 				if text_in == '/today' or text_in == '/t':

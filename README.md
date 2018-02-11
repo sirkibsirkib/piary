@@ -23,13 +23,20 @@ M_T_W_T_F_S_S_M_T_W_T_F_S_S_M_T_W_T_F_S_S_M_T_W_T_F_S_S_M_T_W_T_
                                   Feb                 :         
 ```
 
-
-
 Using `commands`, the user can move the _currently selected_ day backwards and forwards in time. How the user organizes their thoughts is entirely up to them. My suggestion is to strictly (more or less) write notes on the days they _occurred_ even if that is not the day that the user is writing the entry.
 
 For best results, contribute entries frequently and write of events that occurred recently, to preserve the details.
 
-## Using Entries
+## Getting Started
+To get your own Piary going, follow these steps
+1. Install Python 3 by getting it from [python.org](https://www.python.org/) if you don't have it yet.
+1. Use pip to install the needed dependencies with `pip install -r requirements.txt`.
+1. Clone this git repository to your local machine. Locate the root of the repo (with files such as `piary.py`)
+1. Open `config.py` in some text editor. Change the value of `ENTRIES_PATH` to where you'd like your entries stored. Piary will build the filesystem there. It's recommended that you make this an absolute path (eg: `C:\piary\entries`). Piary will attempt to create the folder if it doesn't exist yet.
+1. (_optional_) Set up a git repo of your own inside the folder specified in _#4_, and set the remote source appropriately.
+1. Run `piary.py` using python.
+
+## Using Entry Files
 
 Through use of Piary, the user will (presumably) build a large stockpile of daily entry files. These raw text files can copied out and viewed at leisure.
 
