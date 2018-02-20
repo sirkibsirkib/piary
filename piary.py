@@ -64,7 +64,7 @@ def print_vis(y, m, d, wd, now_tuple):
 	for _ in range(NEXT_N_DAYS):
 		y,m,d,wd = next_date(y,m,d,wd)
 	days_backward = -NEXT_N_DAYS
-	g.stripe_up(PREV_N_DAYS*2, DRAW_H-1, DRAW_H, char=':')
+	g.stripe_up(PREV_N_DAYS*2, DRAW_H-1, DRAW_H, char='|')
 	while days_backward < PREV_N_DAYS:
 		x_write = (PREV_N_DAYS-days_backward) * 2
 		g.set(x_write, DRAW_H-6, weekday_name[wd][0]) 
@@ -72,7 +72,7 @@ def print_vis(y, m, d, wd, now_tuple):
 		g.write_at(x_write, DRAW_H-(4 if days_backward%2==0 else 5), '{:02d}'.format(d))
 		if d == 1:
 			g.write_at(x_write, DRAW_H-3, month_name[m-1])
-			g.stripe_up(x_write-1, DRAW_H-6, DRAW_H-4, char='|')
+			g.stripe_up(x_write-1, DRAW_H-6, DRAW_H-4, char='`')
 		fname = filename_for(y,m,d)
 		if (y,m,d) == now_tuple:
 			g.write_at(x_write, DRAW_H-2, '^TODAY')
