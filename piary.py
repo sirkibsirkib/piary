@@ -18,6 +18,8 @@ NEXT_N_DAYS = 10
 DRAW_H = 17
 DRAW_W = (PREV_N_DAYS+NEXT_N_DAYS)*2 + 20
 
+assert(LINE_CHARS - LINE_LEEWAY > 10)
+
 if ENTRIES_PATH == 'your_entries_path_here':
 	print(('Please set the variable `ENTRIES_PATH` in `config.py`\n'
 	'to your desired entries folder path!\n'
@@ -79,8 +81,8 @@ def print_vis(y, m, d, wd, now_tuple):
 			g.write_at(x_write+1, 0, '>>future>>')
 		try:
 			stat_info = os.stat(fname)
-			draw_height = int(0.6*(stat_info.st_size**0.28))
-			g.stripe_up(x_write, DRAW_H-7, draw_height, char='#')
+			draw_height = int(0.33*(stat_info.st_size**0.33)) + 1 if stat_info.st_size > 0 else 0
+			g.stripe_up(x_write, DRAW_H-7, min(DRAW_H, draw_height), char='#')
 		except: pass
 		y,m,d,wd = prev_date(y,m,d,wd)
 		days_backward += 1
@@ -134,7 +136,23 @@ def filename_for(y,m,d):
 def assert_folder(directory):
 	if not os.path.exists(directory):
 		os.makedirs(directory)
-	
+
+def line_printy(ln, first=True):
+	sys.stdout.write('::  ' if first else '    ')
+	index = ln.find(' ', LINE_CHARS-LINE_LEEWAY, LINE_CHARS)
+	if index == -1:
+		if len(ln) <= LINE_CHARS:
+			sys.stdout.write(ln)
+			print()
+		else:
+			sys.stdout.write(ln[:LINE_CHARS-1])
+			sys.stdout.write('-\n')
+			line_printy(ln[LINE_CHARS-1:], first=False)
+			
+	else:
+		sys.stdout.write(ln[:index])
+		print()
+		line_printy(ln[index+1:], first=False)
 	
 def main():
 	now = datetime.datetime.now()
@@ -149,13 +167,15 @@ def main():
 		print_vis(y, m, d, wd, now_tuple)
 		try:
 			with open(selected_filename, 'r') as f:
-			
 				print('Current entry for today ({}, {}-{}-{}) so far:'.format(weekday_name[wd], y, month_name[m-1], d))
 				for ln in f:
-					print('::  '+ln.strip())
+					line_printy(ln.strip())
 			was_text = True
-		except:
+		except FileNotFoundError as e:
 			print('No entry yet for today ({}, {}-{}-{}):'.format(weekday_name[wd], y, month_name[m-1], d))
+		except Exception as e:
+			print("except!!")	
+			print(e.__class__.__name__)
 		sys.stdout.write('::  ')
 		try:
 			text_in = input().strip()
