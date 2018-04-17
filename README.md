@@ -6,21 +6,22 @@ When the script is started, the entry for the current date is opened and ready f
 At all times, entries for some days in the past and some days in the future are summarized in a small ascii-art bar chart, where each day's text is represented (logarithmically) by the height of a bar.
 
 ```lisp
-                                 |                    :         
-                                 |                    :         
-                                 |      #             :         
-                                 |      #             :         
-                                 |      #             :         
-                                 |      #   # #       :         
-      #   #                      |  # # #   # # # # # :         
-# # # #   # # #                 #|  # # # # # # # # # :         
-# # # # # # # # #     # # # # # #|# # # # # # # # # # #         
-# # # # # # # # #     # # # # # #|# # # # # # # # # # #         
-# # # # # # # # #     # # # # # #|# # # # # # # # # # #         
-M_T_W_T_F_S_S_M_T_W_T_F_S_S_M_T_W_T_F_S_S_M_T_W_T_F_S_S_M_T_W_T_
-15  17  19  21  23  25  27  29  31  02  04  06  08  10: 12  14  
-  16  18  20  22  24  26  28  30  01  03  05  07  09  11  13  15
-                                  Feb                 :         
+          `                                |                   
+          `                                |                   
+          `                                |                   
+          `                                |                   
+          `                            #   |                   
+          `                      # # # #   |                   
+ #   # # #`  # # # # # # #   # # # # # #   |                   
+ # # # # #`# # # # # # # # # # # # # # # # |                   
+ # # # # #`# # # # # # # # # # # # # # # # |                   
+ # # # # #`# # # # # # # # # # # # # # # # |                   
+ # # # # #`# # # # # # # # # # # # # # # # |                   
+_T_W_T_F_S_S_M_T_W_T_F_S_S_M_T_W_T_F_S_S_M_T_W_T_F_S_S_M_T_W_T_
+ 27  29  31  02  04  06  08  10  12  14  16| 18  20  22  24  26
+6  28  30  01  03  05  07  09  11  13  15  17  19  21  23  25  
+           Apr                             |                   
+                                           |                   
 ```
 
 Using `commands`, the user can move the _currently selected_ day backwards and forwards in time. How the user organizes their thoughts is entirely up to them. My suggestion is to strictly (more or less) write notes on the days they _occurred_ even if that is not the day that the user is writing the entry.
